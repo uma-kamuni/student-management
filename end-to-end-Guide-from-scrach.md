@@ -12,11 +12,11 @@
 
 2. **Launch EC2 Instance**
    ```bash
-  Type:c7i.flex-large
-  Storage: 15gb
-  Security Group: ports(80,8080,22)
-  Login to EC2:
-  git clone https://github.com/uma-kamuni/student-management.git
+   Type:c7i.flex-large
+   Storage: 15gb
+   Security Group: ports(80,8080,22)
+   Login to EC2:
+   git clone https://github.com/uma-kamuni/student-management.git
    ```
 
 3. **Java-jdk-21**
@@ -102,16 +102,20 @@ select tomcat 10 --> copy link address which is in .tar.gz
    ./catalina.sh start   --> Ec2Pub_ip:8080/student
 
 ```
+```
 Login to database
 mysql -u admin -h database-1-instance-1.c38m4q40gefi.eu-north-1.rds.amazonaws.com -padmin123
 Check data is adding or not.
+```
 ______________________________________________________________________________________________________________________________
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/d26677bc-5632-42da-b0c4-37969efc9c82" />
 
-
-Here ,we are on http://Ec2_pub_ip:8080/student    where port & ip is exposed
+```
+Here ,we are on http://Ec2_pub_ip:8080/student    
+where port & ip is exposed
 To hide port , we use Nginx Reverse Proxy
 And to hide IP ,configure domain
+```
 ______________________________________________________________________________________________________________________________
 
 8. **Nginx**
