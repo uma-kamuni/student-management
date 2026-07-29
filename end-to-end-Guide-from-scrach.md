@@ -19,7 +19,7 @@
   git clone https://github.com/uma-kamuni/student-management.git
    ```
 
-3. **Java JDK 21**
+3. **Java-jdk-21**
    ```bash
    sudo apt update
    sudo apt install -y openjdk-21-jdk
@@ -106,12 +106,15 @@ Login to database
 mysql -u admin -h database-1-instance-1.c38m4q40gefi.eu-north-1.rds.amazonaws.com -padmin123
 Check data is adding or not.
 ______________________________________________________________________________________________________________________________
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/d26677bc-5632-42da-b0c4-37969efc9c82" />
+
+
 Here ,we are on http://Ec2_pub_ip:8080/student    where port & ip is exposed
 To hide port , we use Nginx Reverse Proxy
 And to hide IP ,configure domain
 ______________________________________________________________________________________________________________________________
 
-8. **Nginx
+8. **Nginx**
    ```bash
    apt install nginx -y
    systemctl status nginx
@@ -137,6 +140,9 @@ ________________________________________________________________________________
     curl localhost
 
     Browse: Ec2_pub_ip/student
+   <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/89e19823-c626-493d-a8e3-3158c4f921c5" />
+
+    
     We r still on http to get https install certbot and add domain to hide ip
 
     
@@ -169,7 +175,8 @@ ________________________________________________________________________________
 
 
    Browse : umak.online/student
-    
+    <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/20d2e986-ef75-485a-964f-5ae51b6781f9" />
+
 
 
    ```
