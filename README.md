@@ -72,6 +72,14 @@ sudo /opt/tomcat/bin/startup.sh
 ```
 http://<server-ip>:8080/student/
 ```
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/180ce119-91c6-44f1-a552-ef9ce38b2b1b" />
+
+
+
+
+
+
+
 
 ## Troubleshooting
 
