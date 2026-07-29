@@ -138,11 +138,11 @@ ________________________________________________________________________________
     ln -s /etc/nginx/sites-available/student /etc/nginx/sites-enabled/
     systemctl reload nginx
     curl localhost
+   ```
 
     Browse: Ec2_pub_ip/student
-   <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/89e19823-c626-493d-a8e3-3158c4f921c5" />
+    <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/9435a4ef-c9eb-4384-85ee-beaad8dc4a1e" />
 
-    
     We r still on http to get https install certbot and add domain to hide ip
 
     
