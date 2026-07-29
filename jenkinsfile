@@ -1,0 +1,108 @@
+pipeline {
+    agent {
+        label 'worker'
+    }
+
+    tools {
+        maven 'maven1'
+    }
+
+    environment {
+        my_aws_credentials = credentials('aws-access')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/mayurpandit25/student-management.git'
+                echo 'clonning is successful'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh '''
+                mvn clean package
+                '''
+                echo 'Build is successful'
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    script {
+                        try {
+                            def qg = waitForQualityGate()
+                            echo "Quality Gate Status: ${qg.status}"
+                            if (qg.status != 'OK') {
+                                error "Quality Gate failed: ${qg.status}"
+                            }
+
+                        } catch (Exception e) {
+                            echo "Quality Gate check failed: ${e.message}"
+                            error "Quality Gate stage failed"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Build With Docker') {
+            steps {
+                sh '''
+                docker build -t student .
+                docker images
+                '''
+            }
+        }
+
+        stage('Push to ECR') {
+            steps {
+                sh '''
+                aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 942049393829.dkr.ecr.us-east-2.amazonaws.com
+                docker tag student:latest 942049393829.dkr.ecr.us-east-2.amazonaws.com/student:latest
+                docker push 942049393829.dkr.ecr.us-east-2.amazonaws.com/student:latest
+                '''
+            }
+        }
+
+        stage('Deployment with k8s') {
+            steps {
+                dir('k8s') {
+                    sh '''
+                    aws eks update-kubeconfig --region us-east-2 --name my-cluster
+                    kubectl apply -f namespace.yaml
+                    kubectl apply -f student-deployment.yaml
+                    kubectl apply -f student-svc.yaml
+                    sleep 30
+                    kubectl get pods -n student
+                    kubectl get svc -o wide -n student
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline is successful.'
+        }
+        failure {
+            echo 'Pipeline is failed.'
+        }
+    }
+}
