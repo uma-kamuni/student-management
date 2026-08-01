@@ -14,7 +14,7 @@
    ```bash
    Type:c7i.flex-large
    Storage: 15gb
-   Security Group: ports(80,8080,22)
+   Security Group: ports(80,8080,22,443)
    Login to EC2:
    git clone https://github.com/uma-kamuni/student-management.git
    ```
