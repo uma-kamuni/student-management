@@ -1,96 +1,32 @@
 pipeline {
-    agent {
-        label "worker"
-    }
 
-    environment {
-        my_aws_credentials = credentials('aws-access')
-    }
-
-    tools {
-        maven "maven"
-    }
+    agent any
 
     stages {
-        stage('checkout'){
+
+        stage('Checkout') {
             steps {
-                git 'https://github.com/uma-kamuni/student-management.git'
-                sh '''
-                echo "clonning is successful"
-                '''
+                git 'https://github.com/mayurpandit25/student-management.git'
             }
         }
 
-        stage('Build'){
+        stage('Build') {
             steps {
-                sh '''
-                mvn clean package
-                echo "build is successfull"
-                '''
-            }
-            post {
-                success {
-                    archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
-                }
+                echo "Build is successful"
             }
         }
 
-        stage('Artifact to S3'){
+        stage('Test') {
+            steps {
+                echo "Test is successful"
+            }
+        }
+
+        stage('Deploy') {
             steps {
                 sh '''
                 aws s3 cp target/*.war s3://umak.online/Artifact/student.war
                 '''
-            }
-        }
-    }
-
-    post {
-
-        success {
-            script {
-
-                def causes = currentBuild.getBuildCauses(
-                    'hudson.model.Cause$UserIdCause'
-                )
-
-                def buildUser = causes ?
-                    causes[0].userName :
-                    'Automatic Trigger'
-
-                slackSend(
-                    channel: '#jenkins-test',
-                    message: """Jenkins Build Notification
-
-User: ${buildUser}
-Job: ${env.JOB_NAME}
-Build Number: #${env.BUILD_NUMBER}
-Status: SUCCESS
-Build URL: ${env.BUILD_URL}"""
-                )
-            }
-        }
-
-        failure {
-            script {
-
-                def causes = currentBuild.getBuildCauses(
-                    'hudson.model.Cause$UserIdCause'
-                )
-
-                def buildUser = causes ?
-                    causes[0].userName :
-                    'Automatic Trigger'
-
-                slackSend(
-                    channel: '#jenkins-test',
-                    message: """Jenkins Build Notification
-
-User: ${buildUser}
-Job: ${env.JOB_NAME}
-Build Number: #${env.BUILD_NUMBER}
-Status: FAILURE
-Build URL: ${env.BUILD_URL}"""
-                )
             }
         }
     }
