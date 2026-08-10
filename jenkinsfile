@@ -43,4 +43,55 @@ pipeline {
             }
         }
     }
+
+    post {
+
+        success {
+            script {
+
+                def causes = currentBuild.getBuildCauses(
+                    'hudson.model.Cause$UserIdCause'
+                )
+
+                def buildUser = causes ?
+                    causes[0].userName :
+                    'Automatic Trigger'
+
+                slackSend(
+                    channel: '#jenkins-test',
+                    message: """Jenkins Build Notification
+
+User: ${buildUser}
+Job: ${env.JOB_NAME}
+Build Number: #${env.BUILD_NUMBER}
+Status: SUCCESS
+Build URL: ${env.BUILD_URL}"""
+                )
+            }
+        }
+
+        failure {
+            script {
+
+                def causes = currentBuild.getBuildCauses(
+                    'hudson.model.Cause$UserIdCause'
+                )
+
+                def buildUser = causes ?
+                    causes[0].userName :
+                    'Automatic Trigger'
+
+                slackSend(
+                    channel: '#jenkins-test',
+                    message: """Jenkins Build Notification
+
+User: ${buildUser}
+Job: ${env.JOB_NAME}
+Build Number: #${env.BUILD_NUMBER}
+Status: FAILURE
+Build URL: ${env.BUILD_URL}"""
+                )
+            }
+        }
+    }
 }
