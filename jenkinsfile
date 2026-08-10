@@ -6,7 +6,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/mayurpandit25/student-management.git'
+                git 'https://github.com/uma-kamuni/student-management.git'
             }
         }
 
@@ -24,10 +24,63 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh '''
-                aws s3 cp target/*.war s3://umak.online/Artifact/student.war
-                '''
+                echo "Deployment is successful"
             }
         }
     }
+
+    post {
+
+        success {
+            script {
+
+                def causes = currentBuild.getBuildCauses(
+                    'hudson.model.Cause$UserIdCause'
+                )
+
+                def buildUser = causes ?
+                    causes[0].userName :
+                    'Automatic Trigger'
+
+                slackSend(
+                    channel: '#jenkins-test',
+                    message: """Jenkins Build Notification
+
+User: ${buildUser}
+Job: ${env.JOB_NAME}
+Build Number: #${env.BUILD_NUMBER}
+Status: SUCCESS
+Build URL: ${env.BUILD_URL}"""
+                )
+            }
+        }
+
+        failure {
+            script {
+
+                def causes = currentBuild.getBuildCauses(
+                    'hudson.model.Cause$UserIdCause'
+                )
+
+                def buildUser = causes ?
+                    causes[0].userName :
+                    'Automatic Trigger'
+
+                slackSend(
+                    channel: '#jenkins-test',
+                    message: """Jenkins Build Notification
+
+User: ${buildUser}
+Job: ${env.JOB_NAME}
+Build Number: #${env.BUILD_NUMBER}
+Status: FAILURE
+Build URL: ${env.BUILD_URL}"""
+                )
+            }
+        }
+    }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> bd53137a0358e58fb3c84c37c49632bf9c7ea398
