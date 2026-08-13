@@ -1,0 +1,47 @@
+pipeline {
+    agent {
+        label 'worker'
+    }
+
+    environment {
+        my_aws_credentials = credentials('aws-access')
+    }
+
+    tools {
+        terraform 'terraform'
+    }
+
+    stages {
+        stage('checkout'){
+            steps{
+                git 'https://github.com/mayurpandit25/student-management.git'
+            }
+        }
+
+        stage('terraform-init'){
+            steps {
+                sh '''
+                terraform init
+                '''
+            }
+        }
+
+        stage('terraform-validate'){
+            steps {
+                sh 'terraform validate'
+            }
+        }
+
+        stage('terraform-plan'){
+            steps {
+                sh 'terraform plan'
+            }
+        }
+
+        stage('terraform apply'){
+            steps {
+                sh 'terraform apply -auto-approve'
+            }
+        }
+    }
+}
