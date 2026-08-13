@@ -78,20 +78,20 @@ pipeline {
             }
         }
 
-        stage('deploy to kubernetes'){
-            steps {
-                sh '''
-                aws eks update-kubeconfig --name my-cluster-eks --region eu-north-1
-                kubectl apply -f k8s/student-deployment.yaml
-                kubectl apply -f k8s/student-svc.yaml   
-                kubectl get pods
-                kubectl get svc
-                sleep 30 
-                kubectl get pods
-                kubectl get svc -o wide
-                '''
-            }
-        }
+        // stage('deploy to kubernetes'){
+        //     steps {
+        //         sh '''
+        //         aws eks update-kubeconfig --name my-cluster-eks --region eu-north-1
+        //         kubectl apply -f k8s/student-deployment.yaml
+        //         kubectl apply -f k8s/student-svc.yaml   
+        //         kubectl get pods
+        //         kubectl get svc
+        //         sleep 30 
+        //         kubectl get pods
+        //         kubectl get svc -o wide
+        //         '''
+        //     }
+        // }
     }
 
     post{
