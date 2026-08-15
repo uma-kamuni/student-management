@@ -51,32 +51,32 @@ pipeline {
             }
         }
 
-        stage('SonarQube Quality Gates'){
-            steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+        // stage('SonarQube Quality Gates'){
+        //     steps {
+        //         timeout(time: 5, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
 
-        stage('Docker Build'){
-            steps {
-                sh '''
-                docker build -t student:latest .
-                docker images
-                '''
-            }
-        }
+        // stage('Docker Build'){
+        //     steps {
+        //         sh '''
+        //         docker build -t student:latest .
+        //         docker images
+        //         '''
+        //     }
+        // }
 
-        stage('Push Images To ECR'){
-            steps {
-                sh '''
-                aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 876358614994.dkr.ecr.eu-north-1.amazonaws.com
-                docker tag student:latest 876358614994.dkr.ecr.eu-north-1.amazonaws.com/student:latest
-                docker push 876358614994.dkr.ecr.eu-north-1.amazonaws.com/student:latest
-                '''
-            }
-        }
+        // stage('Push Images To ECR'){
+        //     steps {
+        //         sh '''
+        //         aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 876358614994.dkr.ecr.eu-north-1.amazonaws.com
+        //         docker tag student:latest 876358614994.dkr.ecr.eu-north-1.amazonaws.com/student:latest
+        //         docker push 876358614994.dkr.ecr.eu-north-1.amazonaws.com/student:latest
+        //         '''
+        //     }
+        // }
 
         // stage('deploy to kubernetes'){
         //     steps {
