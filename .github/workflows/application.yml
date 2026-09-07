@@ -58,3 +58,19 @@ jobs:
           aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 580222437000.dkr.ecr.eu-north-1.amazonaws.com
           docker tag student:latest 580222437000.dkr.ecr.eu-north-1.amazonaws.com/student:latest
           docker push 580222437000.dkr.ecr.eu-north-1.amazonaws.com/student:latest
+
+      - name: Setup Terraform 
+        uses: hashicorp/setup-terraform@v4
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform fmt 
+        run: terraform fmt
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform apply 
+        run: terraform apply -auto-approve
+          
