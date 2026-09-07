@@ -33,10 +33,10 @@ jobs:
       - name: Store artifact to s3
         run: aws s3 cp target/*.war s3://uma.online/student.war
 
-      - name: Sonarqube Analysys
+      - name: SonarQube Analysis 
         env:
-          SONAR_TOKEN: ${{ secrets.sonar-token }}
-          SONAR_HOST_URL: ${{ secrets.sq_host_url }}
+          SONAR_TOKEN: ${{ secrets.SQ_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SQ_HOST_URL }}
         run: |
           mvn sonar:sonar \
             -Dsonar.token="$SONAR_TOKEN" \
