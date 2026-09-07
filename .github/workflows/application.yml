@@ -37,5 +37,14 @@ jobs:
         run: | 
           docker build -t student . 
           docker images
+
+      - name: Scan image using Trivy
+        run: trivy image --scanners vuln --severity HIGH,CRITICAL --exit-code 0 student:latest
+
+      - name: Push image to ECR
+        run: |
+          aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 580222437000.dkr.ecr.eu-north-1.amazonaws.com
+          docker tag student:latest 580222437000.dkr.ecr.eu-north-1.amazonaws.com/student:latest
+          docker push 580222437000.dkr.ecr.eu-north-1.amazonaws.com/student:latestdocker push 822920903800.dkr.ecr.us-west-2.amazonaws.com/student:latest     
           
         
