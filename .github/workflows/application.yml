@@ -73,4 +73,19 @@ jobs:
 
       - name: Terraform apply 
         run: terraform apply -auto-approve
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: latest
+
+      - name: Configure EKS cluster 
+        run: aws eks update-kubeconfig --name my-eks-cluster --region eu-north-1
+          
+      - name: Deployment On kubernetes
+        run: |
+          kubectl apply -f k8s/
+          sleep 30
+          kubectl get pods 
+          kubectl get svc -o wide   
           
