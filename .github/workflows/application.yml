@@ -12,4 +12,13 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v5
-      
+
+      - name: setup java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Build Application
+        run: mvn clean package
