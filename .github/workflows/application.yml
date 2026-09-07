@@ -64,7 +64,7 @@ jobs:
 
       - name: Terraform init
         run: terraform init
-
+  
       - name: Terraform fmt 
         run: terraform fmt
 
@@ -72,7 +72,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform apply 
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -lock=false
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v4
