@@ -47,7 +47,7 @@ jobs:
             "${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=com.school:student-management" \
             | jq -r '.projectStatus.status')
           echo "Quality Gate: $STATUS"
-          [ "$STATUS" = "OK" ] || exit 11      
+          [ "$STATUS" = "OK" ] || exit 1   
           
           
         
