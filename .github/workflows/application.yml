@@ -31,5 +31,5 @@ jobs:
           aws-region: eu-north-1
           
       - name: Store artifact to s3
-        run: s3 cp target/*.war s3://uma.online/student.war
+        run: aws s3 cp target/*.war s3://uma.online/student.war
         
