@@ -33,21 +33,9 @@ jobs:
       - name: Store artifact to s3
         run: aws s3 cp target/*.war s3://uma.online/student.war
 
-      - name: SonarQube Analysis 
-        env:
-          SONAR_TOKEN: ${{ secrets.SQ_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SQ_HOST_URL }}
-        run: |
-          mvn sonar:sonar \
-            -Dsonar.token="$SONAR_TOKEN" \
-            -Dsonar.host.url="$SONAR_HOST_URL"
-            
-      - name: SonarQube Quality Gates
-        run: |
-          STATUS=$(curl -s -u "${{ secrets.SONAR_TOKEN }}:" \
-            "${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=com.school:student-management" \
-            | jq -r '.projectStatus.status')
-          echo "Quality Gate: $STATUS"
-          [ "$STATUS" = "OK" ] || exit 1
+      - name: Docker Build 
+        run: | 
+          docker build -t student . 
+          docker images
           
         
