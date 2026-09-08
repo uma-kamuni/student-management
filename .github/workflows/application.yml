@@ -38,21 +38,6 @@ jobs:
           docker build -t student . 
           docker images
 
-      - name: Trivy Install 
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget 
-          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | \
-            gpg --dearmor | \
-            sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
-          echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | \
-            sudo tee /etc/apt/sources.list.d/trivy.list
-          sudo apt-get update
-          sudo apt-get install -y trivy
-      
-      - name: Scan image using Trivy
-        run: trivy image --scanners vuln --severity HIGH,CRITICAL --exit-code 0 student:latest
-
       - name: Push image to ECR
         run: |
           aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 580222437000.dkr.ecr.eu-north-1.amazonaws.com
@@ -71,20 +56,10 @@ jobs:
       - name: Terraform validate
         run: terraform validate
 
-      - name: Terraform Destroy 
-        run: terraform destroy -auto-approve -lock=false
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -lock=false
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v4
         with:
           version: latest
-
-      - name: Configure EKS cluster 
-        run: aws eks update-kubeconfig --name my-eks-cluster --region eu-north-1
-          
-      - name: Deployment On kubernetes
-        run: |
-          kubectl apply -f k8s/
-          sleep 30
-          kubectl get pods 
-          kubectl get svc -o wide         
