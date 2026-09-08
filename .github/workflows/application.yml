@@ -56,8 +56,8 @@ jobs:
       - name: Terraform validate
         run: terraform validate
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve -lock=false
+      - name: Terraform Destruy
+        run: terraform destroy -auto-approve -lock=false
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v4
